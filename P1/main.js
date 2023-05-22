@@ -1,8 +1,14 @@
-let sueldoBruto = parseFloat(prompt("Ingresa tu sueldo bruto anual (en €)"));
+const smi = 15120.00;
 
-while (isNaN(sueldoBruto)) {
-  sueldoBruto = parseFloat(prompt("Debes ingresar un número. Ingresa tu sueldo bruto anual (en €)"));
-}
+let salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €)"));
+while (isNaN(salarioBruto) || salarioBruto < smi) {
+  if (isNaN(salarioBruto)) {
+    salarioBruto = parseFloat(prompt("Debes ingresar un número. Ingresa tu salario bruto anual (en €)"))
+  }
+  else {
+    salarioBruto = parseFloat(prompt("Debes ingresar un salario bruto anual mayor al Salario Mínimo Interprofesional (15.120€)"));
+  }
+  }
 
 const tramosEstatal = [
   { limite: 0, tasa: 0 },
@@ -23,14 +29,14 @@ const tramosMadrid = [
   { limite: Infinity, tasa: 0.205 }
 ];
 
-const BaseMinSS = 1759.5
-const BaseMaxSS = 4495.5
-let sueldoBrutoMensual = sueldoBruto / 12;
+const BaseMinSS = 1759.50
+const BaseMaxSS = 4495.50
+let salarioBrutoMensual = salarioBruto / 12;
 
-let baseSS = 0;
-let pagoSS = 0;
+let baseSS = 0.00;
+let pagoSS = 0.00;
 
-sueldoBrutoMensual < BaseMinSS ? baseSS = BaseMinSS : baseSS = Math.min(sueldoBrutoMensual, BaseMaxSS);
+salarioBrutoMensual < BaseMinSS ? baseSS = BaseMinSS : baseSS = Math.min(salarioBrutoMensual, BaseMaxSS);
 
 pagoSS = baseSS * 0.0625 * 12
 
@@ -45,9 +51,9 @@ function euroFormat(number) {
   return euro;
 }
 
-function calcularIRPF(sueldoBruto, tablaTramos) {
+function calcularIRPF(salarioBruto, tablaTramos) {
   let irpf = 0;
-  let restante = sueldoBruto - pagoSS;
+  let restante = salarioBruto - pagoSS;
   const tramos = tablaTramos;
   for (let t = 1; t <= tramos.length; t++) {
     const rango = tramos[t].limite - tramos[t-1].limite;
@@ -62,7 +68,8 @@ function calcularIRPF(sueldoBruto, tablaTramos) {
   return irpf;
 }
 
-const irpfPagar = calcularIRPF(sueldoBruto, tramosEstatal) + calcularIRPF(sueldoBruto, tramosMadrid);
-const tasaEfectiva = irpfPagar/sueldoBruto*100;
 
-alert("Con un sueldo bruto de " + euroFormat(sueldoBruto) + " anuales, en Madrid pagarías " + euroFormat(irpfPagar) + " en impuestos y " + euroFormat(pagoSS) + " a la Seguridad Social. La tasa efectiva es de " + tasaEfectiva.toFixed(2) + "%");
+const irpfPagar = calcularIRPF(salarioBruto, tramosEstatal) + calcularIRPF(salarioBruto, tramosMadrid);
+const tasaEfectiva = irpfPagar/salarioBruto*100;
+
+alert("Con un salario bruto de " + euroFormat(salarioBruto) + " anuales, en Madrid pagarías " + euroFormat(irpfPagar) + " en impuestos y " + euroFormat(pagoSS) + " a la Seguridad Social para el año fiscal 2023. La tasa efectiva de impuestos es de " + tasaEfectiva.toFixed(2) + "%");
