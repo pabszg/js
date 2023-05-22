@@ -6,6 +6,13 @@ let baseSS = 0.00;
 let pagoSS = 0.00;
 let salarioNetoMensual = 0.00;
 let salarioExtra = 0.00;
+
+let user = {
+  name: "",
+  edad: "",
+  salarioBruto: ""
+};
+
 const tramosEstatal = [
   { limite: 0, tasa: 0 },
   { limite: 12450, tasa: 0.095 },
@@ -26,15 +33,14 @@ const tramosMadrid = [
 // FORMATO A EUROS
 let euro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 
-// INPUTS Y CHECKEOS
-let salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €)"));
-while (isNaN(salarioBruto) || salarioBruto < smi) {
-  if (isNaN(salarioBruto)) {
-    salarioBruto = parseFloat(prompt("Debes ingresar un número válido. Ingresa tu salario bruto anual (en €)"))
-  }
-  else {
-    salarioBruto = parseFloat(prompt("Debes ingresar un salario bruto anual mayor al Salario Mínimo Interprofesional (15.120€)"));
-  }
+// INPUTS Y VALIDATIONS
+user.name = prompt("Cómo te llamas?")
+user.edad = parseFloat(prompt("Qué edad tienes?"))
+while (isNaN(user.edad)) {user.edad = parseFloat(prompt("Debes ingresar un número. Qué edad tienes?"))}
+user.salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €, sin puntos)"));
+while (isNaN(user.salarioBruto) || user.salarioBruto < smi) {
+  isNaN(user.salarioBruto) ? user.salarioBruto = parseFloat(prompt("Debes ingresar un número válido. Ingresa tu salario bruto anual (en €, sin puntos)"))
+  : user.salarioBruto = parseFloat(prompt("Debes ingresar un salario bruto anual mayor al Salario Mínimo Interprofesional (15.120€)"));
   }
 
 let numeroPagas = parseFloat(prompt("Cuántos sueldos al año? (12 o 14)"))
@@ -43,7 +49,7 @@ while (numeroPagas != 12 && numeroPagas != 14) {
   numeroPagas = parseFloat(prompt("Cuántos sueldos al año? Debes ingresar 12 o 14"))
 }
 
-let salarioBrutoMensual = salarioBruto / 12;
+let salarioBrutoMensual = user.salarioBruto / 12;
 
 // CALCULO SEGURIDAD SOCIAL
 salarioBrutoMensual < baseMinSS ? baseSS = baseMinSS : baseSS = Math.min(salarioBrutoMensual, baseMaxSS);
@@ -67,10 +73,10 @@ function calcularIRPF(salarioBruto, tablaTramos) {
 }
 
 // CALCULOS
-const pagoIRPF = calcularIRPF(salarioBruto, tramosEstatal) + calcularIRPF(salarioBruto, tramosMadrid);
-const tasaEfectiva = pagoIRPF/salarioBruto*100;
-const cargaTributaria = (pagoIRPF + pagoSS) / salarioBruto * 100;
-const salarioNetoAnual = salarioBruto - (pagoIRPF + pagoSS)
+const pagoIRPF = calcularIRPF(user.salarioBruto, tramosEstatal) + calcularIRPF(user.salarioBruto, tramosMadrid);
+const tasaEfectiva = pagoIRPF/user.salarioBruto*100;
+const cargaTributaria = (pagoIRPF + pagoSS) / user.salarioBruto * 100;
+const salarioNetoAnual = user.salarioBruto - (pagoIRPF + pagoSS)
 
 switch(numeroPagas) {
   case(12):
@@ -88,11 +94,14 @@ switch(numeroPagas) {
 }
 
 // OUTPUT
-let mensaje = `Con un salario bruto de ${euro.format(salarioBruto)} anuales, en Madrid pagarías ${euro.format(pagoIRPF)} en impuestos \
+let mensaje = `${user.name},
+ \nCon un salario bruto de ${euro.format(user.salarioBruto)} anuales, en Madrid pagarías ${euro.format(pagoIRPF)} en impuestos\
  y ${euro.format(pagoSS)} a la Seguridad Social para el año fiscal 2023. 
- \n Tasa efectiva de impuestos: ${tasaEfectiva.toFixed(2)}%
- \n Carga Fiscal: ${cargaTributaria.toFixed(2)}%
- \n Salario neto mensual: ${euro.format(salarioNetoMensual)} `
- numeroPagas == 14 ? mensaje += `\n Pagas extra (x2): ${euro.format(salarioExtra)}` : "";
+ \nTasa efectiva de impuestos: ${tasaEfectiva.toFixed(2)}%
+ \nCarga Fiscal: ${cargaTributaria.toFixed(2)}%
+ \nSalario neto mensual: ${euro.format(salarioNetoMensual)} `
+ numeroPagas == 14 ? mensaje += `
+ \nPagas extra (x2): ${euro.format(salarioExtra)}` : "";
 
 alert(mensaje);
+console.log(user)
