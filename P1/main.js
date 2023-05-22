@@ -1,15 +1,11 @@
+// VARIABLES Y OBJETOS
 const smi = 15120.00;
-
-let salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €)"));
-while (isNaN(salarioBruto) || salarioBruto < smi) {
-  if (isNaN(salarioBruto)) {
-    salarioBruto = parseFloat(prompt("Debes ingresar un número. Ingresa tu salario bruto anual (en €)"))
-  }
-  else {
-    salarioBruto = parseFloat(prompt("Debes ingresar un salario bruto anual mayor al Salario Mínimo Interprofesional (15.120€)"));
-  }
-  }
-
+const baseMinSS = 1759.50
+const baseMaxSS = 4495.50
+let baseSS = 0.00;
+let pagoSS = 0.00;
+let salarioNetoMensual = 0.00;
+let salarioExtra = 0.00;
 const tramosEstatal = [
   { limite: 0, tasa: 0 },
   { limite: 12450, tasa: 0.095 },
@@ -19,7 +15,6 @@ const tramosEstatal = [
   { limite: 300000, tasa: 0.225 },
   { limite: Infinity, tasa: 0.245 }
 ];
-
 const tramosMadrid = [
   { limite: 0, tasa: 0 },
   { limite: 12960.45, tasa: 0.085 },
@@ -29,28 +24,30 @@ const tramosMadrid = [
   { limite: Infinity, tasa: 0.205 }
 ];
 
-const BaseMinSS = 1759.50
-const BaseMaxSS = 4495.50
-let salarioBrutoMensual = salarioBruto / 12;
+// INPUTS Y CHECKEOS
+let salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €)"));
+while (isNaN(salarioBruto) || salarioBruto < smi) {
+  if (isNaN(salarioBruto)) {
+    salarioBruto = parseFloat(prompt("Debes ingresar un número válido. Ingresa tu salario bruto anual (en €)"))
+  }
+  else {
+    salarioBruto = parseFloat(prompt("Debes ingresar un salario bruto anual mayor al Salario Mínimo Interprofesional (15.120€)"));
+  }
+  }
 
-let baseSS = 0.00;
-let pagoSS = 0.00;
+let numeroPagas = parseFloat(prompt("Cuántos sueldos al año? (12 o 14)"))
 
-salarioBrutoMensual < BaseMinSS ? baseSS = BaseMinSS : baseSS = Math.min(salarioBrutoMensual, BaseMaxSS);
-
-pagoSS = baseSS * 0.0625 * 12
-
-console.log(baseSS);
-console.log(pagoSS);
-console.log(BaseMinSS)
-console.log(tramosEstatal)
-console.log(tramosMadrid)
-
-function euroFormat(number) {
-  euro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(number)
-  return euro;
+while (numeroPagas != 12 && numeroPagas != 14) {
+  numeroPagas = parseFloat(prompt("Cuántos sueldos al año? Debes ingresar 12 o 14"))
 }
 
+let salarioBrutoMensual = salarioBruto / 12;
+
+// CALCULO SEGURIDAD SOCIAL
+salarioBrutoMensual < baseMinSS ? baseSS = baseMinSS : baseSS = Math.min(salarioBrutoMensual, baseMaxSS);
+pagoSS = baseSS * 0.0625 * 12;
+
+// CALCULO IRPF POR TABLA
 function calcularIRPF(salarioBruto, tablaTramos) {
   let irpf = 0;
   let restante = salarioBruto - pagoSS;
@@ -64,12 +61,39 @@ function calcularIRPF(salarioBruto, tablaTramos) {
       break;
     }
   }
-  console.log(irpf)
   return irpf;
 }
+// FORMATO A EUROS
+let euro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 
+// CALCULOS
+const pagoIRPF = calcularIRPF(salarioBruto, tramosEstatal) + calcularIRPF(salarioBruto, tramosMadrid);
+const tasaEfectiva = pagoIRPF/salarioBruto*100;
+const cargaTributaria = (pagoIRPF + pagoSS) / salarioBruto * 100;
+const salarioNetoAnual = salarioBruto - (pagoIRPF + pagoSS)
 
-const irpfPagar = calcularIRPF(salarioBruto, tramosEstatal) + calcularIRPF(salarioBruto, tramosMadrid);
-const tasaEfectiva = irpfPagar/salarioBruto*100;
+switch(numeroPagas) {
+  case(12):
+    salarioNetoMensual = salarioNetoAnual / 12;
+    console.log(salarioNetoMensual);
+    break;
+  case(14):
+    salarioExtra = salarioNetoAnual / 14;
+    salarioNetoMensual = salarioExtra - (pagoSS / 12);
+    console.log(salarioNetoMensual);
+    console.log(salarioExtra);
+    break;
+  default:
+    break;
+}
 
-alert("Con un salario bruto de " + euroFormat(salarioBruto) + " anuales, en Madrid pagarías " + euroFormat(irpfPagar) + " en impuestos y " + euroFormat(pagoSS) + " a la Seguridad Social para el año fiscal 2023. La tasa efectiva de impuestos es de " + tasaEfectiva.toFixed(2) + "%");
+// OUTPUT
+let mensaje = `Con un salario bruto de ${euro.format(salarioBruto)} anuales, en Madrid pagarías ${euro.format(pagoIRPF)} en impuestos \
+ y ${euro.format(pagoSS)} a la Seguridad Social para el año fiscal 2023. 
+ \n Tasa efectiva de impuestos: ${tasaEfectiva.toFixed(2)}%
+ \n Carga Fiscal: ${cargaTributaria.toFixed(2)}%
+ \n Salario neto mensual: ${euro.format(salarioNetoMensual)} `
+
+ numeroPagas == 14 ? mensaje += `\n Pagas extra (x2): ${euro.format(salarioExtra)}` : "";
+
+alert(mensaje);
