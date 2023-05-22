@@ -93,7 +93,6 @@ let mensaje = `Con un salario bruto de ${euro.format(salarioBruto)} anuales, en 
  \n Tasa efectiva de impuestos: ${tasaEfectiva.toFixed(2)}%
  \n Carga Fiscal: ${cargaTributaria.toFixed(2)}%
  \n Salario neto mensual: ${euro.format(salarioNetoMensual)} `
-
  numeroPagas == 14 ? mensaje += `\n Pagas extra (x2): ${euro.format(salarioExtra)}` : "";
 
 alert(mensaje);
