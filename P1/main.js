@@ -23,6 +23,8 @@ const tramosMadrid = [
   { limite: 55601.89, tasa: 0.174 },
   { limite: Infinity, tasa: 0.205 }
 ];
+// FORMATO A EUROS
+let euro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 
 // INPUTS Y CHECKEOS
 let salarioBruto = parseFloat(prompt("Ingresa tu salario bruto anual (en €)"));
@@ -63,8 +65,6 @@ function calcularIRPF(salarioBruto, tablaTramos) {
   }
   return irpf;
 }
-// FORMATO A EUROS
-let euro = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
 
 // CALCULOS
 const pagoIRPF = calcularIRPF(salarioBruto, tramosEstatal) + calcularIRPF(salarioBruto, tramosMadrid);
