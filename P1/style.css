@@ -1,0 +1,45 @@
+* {margin: 0; padding: 0; text-decoration: none;}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px 0;
+}
+form {
+    text-align: center;
+}
+form input.text {
+    width: 300px;
+    padding: 10px;
+}
+input.radio {
+    width: 50px;
+    background-color: aliceblue;
+    border: 2px solid black;
+    padding: 10px;
+}
+input.error {
+    border-color: crimson;
+}
+button {
+    margin: 10px 0;
+    text-align: center;
+    background-color: aliceblue;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#calculadora label{
+    display: block;
+    font-weight: 600;
+    padding: 10px;
+}
+
+#results {
+    padding: 50px;
+    line-height: 1.5rem;
+}

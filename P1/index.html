@@ -7,6 +7,19 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <h1>Calculadora IRPF Madrid</h1>
+  <form id="calculadora" action="">
+    <label for="name">Nombre</label><input class="text" type="text" id="name">
+    <label for="age">Edad</label><input class="text" type="text" id="age">
+    <label for="gross">Salario Bruto Anual</label><input class="text" type="text" id="gross">
+    <label for="sueldos">Número de pagas</label>
+      12<input class="radio" type="radio" name="sueldos" value="12">
+      14<input class="radio" type="radio" name="sueldos" value="14"><br>
+    <button type="submit">Calcular IRPF</button>
+  </form>
+  <div id="results">
+  </div>
   <script src="main.js"></script>
+  <script src="tramos.json"></script>
 </body>
 </html>
