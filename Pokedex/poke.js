@@ -52,6 +52,7 @@ let audio = new Audio('wtpsound.mp3');
 function playAudio() {
     audio.play();
 }
+let count = 0;
 
 const whosThat = () => {
     try {
@@ -75,10 +76,15 @@ const whosThat = () => {
         console.log(typed)
         if (typed.toLowerCase() == pokemonArray[random].name) {
             document.getElementById("hiddenPoke").classList.remove("hidden-pokemon");
-            catched.push(pokemonArray[random].id)
+            count++;
+            document.getElementById("counter").innerHTML = count;
+            catched.push(pokemonArray[random].id);
             pokemonArray.splice(random,1);
             console.log(pokemonArray)
-            setTimeout(whosThat, 2000)
+            setTimeout(() => {
+                document.getElementById("hiddenPoke").classList.add("captured")
+            }, 1000);
+            setTimeout(whosThat, 1000);
         }
     })
 }
@@ -89,15 +95,17 @@ const addControls = () => {
     button.setAttribute("class", "controls")
     document.getElementById("controls").append(button)
     button = document.getElementById("play")
-    button.innerHTML = "Next"
+    button.innerHTML = "Skip"
     button.addEventListener("click", whosThat)
     let input = document.createElement("input");
     input.setAttribute("type", "text");
     input.setAttribute("class", "text");
     input.setAttribute("id", "answer");
     document.getElementById("input").append(input);
+    document.getElementById("counter").innerHTML = count
 
 }
+
 
 getPokemons(151).then(() => {
 }).then(() => {

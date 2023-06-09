@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,600;0,800;1,300&family=Press+Start+2P&family=Roboto:wght@300;400&display=swap');
+
 :root {
     --primary:#335dfd;
     --loading-color: rgba(0,0,0,.05);
@@ -6,13 +8,14 @@
 body {
     margin: 0;
     padding: 0;
-    background: radial-gradient(#add8e6 30%, #08c2ff 80%, red 100%); 
+    background: radial-gradient(#add8e6 30%, #08c2ff 70%, red 100%); 
     font-size: 20px;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    font-family: 'Press Start 2P', cursive;
 }
 
 .game-container {
@@ -26,12 +29,33 @@ body {
 .pokemon {
     width: 500px;
     transition: all 0.2s ease;
+    animation: grow 0.5s;
+}
+#pokemon {
+    height: 500px;
+}
+@keyframes grow {
+    0% {width: 0;}
+    100% {width: 500px;}
+  }
+@keyframes minimize {
+    0% {width: 500px}
+    100% {width: 0;}
+}
+
+.captured {
+    animation: minimize 1s;
+    width: 0;
 }
 
 .pokemon, #controls, #pokemon, #input {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+#counter {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3rem;
 }
 
 .hidden-pokemon {
@@ -44,16 +68,23 @@ body {
     border: 2px solid black;
     padding: 10px 20px;
     cursor: pointer;
+    margin: 20px;
 }
 
 #input input {
-    font-size: 1.2rem;
-    height: 60px;
-    border: 2px solid black;
+    background-color: azure;
+    font-size: 2rem;
+    font-weight: 500;
+    width: 300px;
+    height: 50px;
+    border: 5px solid black;
+    margin: 20px;
+    border-radius: 15px;
+    padding: 10px;
 }
 
 #input input::first-letter {
-    text-transform: capitalize;
+    text-transform: uppercase;
 }
 
 .card {
