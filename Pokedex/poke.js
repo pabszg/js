@@ -51,7 +51,8 @@ const addImages = () => {
 
 const whosThat = () => {
     try {
-        document.getElementById("hiddenPoke").remove()
+        document.getElementById("hiddenPoke").remove();
+        document.getElementById("answer").value = "";
     }
     catch (error) {
         console.log(error)
@@ -59,8 +60,8 @@ const whosThat = () => {
     let random = Math.floor(Math.random() * pokemonArray.length);
     let pick = pokemonArray[random].artwork;
     let hiddenPoke = document.createElement("img");
-    hiddenPoke.setAttribute("src", pick)
-    hiddenPoke.setAttribute("id", "hiddenPoke")
+    hiddenPoke.src = pick
+    hiddenPoke.id = "hiddenPoke"
     hiddenPoke.classList.add("pokemon", "hidden-pokemon")
     document.getElementById("pokemon").append(hiddenPoke)
     let answer = document.getElementById("answer")
@@ -68,7 +69,7 @@ const whosThat = () => {
         let typed = document.getElementById("answer").value;
         console.log(typed)
         if (typed == pokemonArray[random].name) {
-            document.getElementById("hiddenPoke").classList.remove();
+            document.getElementById("hiddenPoke").classList.remove("hidden-pokemon");
         }
     })
 }
