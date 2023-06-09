@@ -70,7 +70,6 @@ const whosThat = () => {
     hiddenPoke.classList.add("pokemon", "hidden-pokemon")
     document.getElementById("pokemon").append(hiddenPoke)
     let answer = document.getElementById("answer")
-    playAudio();
     answer.addEventListener("keyup", (e) => {
         let typed = document.getElementById("answer").value;
         console.log(typed)
@@ -107,6 +106,7 @@ getPokemons(151).then(() => {
     addControls();
     addImages();
     whosThat();
+    playAudio();
 })
 
 
