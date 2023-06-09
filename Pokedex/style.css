@@ -8,7 +8,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: radial-gradient(#add8e6 30%, #08c2ff 70%, red 100%); 
+    background: radial-gradient(#add8e6 30%, #08c2ff 50%, red 100%); 
     font-size: 20px;
     height: 100vh;
     display: flex;
@@ -55,7 +55,15 @@ body {
 }
 #counter {
     font-family: 'Press Start 2P', cursive;
-    font-size: 3rem;
+    font-size: 4rem;
+    width: 500;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ffcb05;
+    text-transform: uppercase;
+    text-shadow: 5px 5px 0 #3c5aa6;
+    -webkit-text-stroke: 5px #3c5aa6; /* for better cross browser compatibility */
+    text-stroke: 5px #3153DD;
 }
 
 .hidden-pokemon {
@@ -63,9 +71,9 @@ body {
 }
 
 #play {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     background-color: aliceblue;
-    border: 2px solid black;
+    border: 3px solid black;
     padding: 10px 20px;
     cursor: pointer;
     margin: 20px;
@@ -80,7 +88,9 @@ body {
     border: 5px solid black;
     margin: 20px;
     border-radius: 15px;
-    padding: 10px;
+    padding: 0 10px;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 #input input::first-letter {
