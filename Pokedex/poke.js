@@ -1,5 +1,6 @@
 let pokemonArray = [];
 let artArray = [];
+let catched = [];
 
 const getPokeData = async (id) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
@@ -31,8 +32,6 @@ const getPokemons = async (limit) => {
     }
     await Promise.all(promises);
     pokemonArray.sort((a, b) => a.id - b.id);
-    console.log(pokemonArray);
-    console.log(pokemonArray[1].name); // This should work now
 }
 
 const createImages = () => {
@@ -49,10 +48,16 @@ const addImages = () => {
     });
 }
 
+let audio = new Audio('wtpsound.mp3');
+function playAudio() {
+    audio.play();
+}
+
 const whosThat = () => {
     try {
         document.getElementById("hiddenPoke").remove();
         document.getElementById("answer").value = "";
+        audio.pause
     }
     catch (error) {
         console.log(error)
@@ -65,11 +70,16 @@ const whosThat = () => {
     hiddenPoke.classList.add("pokemon", "hidden-pokemon")
     document.getElementById("pokemon").append(hiddenPoke)
     let answer = document.getElementById("answer")
+    playAudio();
     answer.addEventListener("keyup", (e) => {
         let typed = document.getElementById("answer").value;
         console.log(typed)
-        if (typed == pokemonArray[random].name) {
+        if (typed.toLowerCase() == pokemonArray[random].name) {
             document.getElementById("hiddenPoke").classList.remove("hidden-pokemon");
+            catched.push(pokemonArray[random].id)
+            pokemonArray.splice(random,1);
+            console.log(pokemonArray)
+            setTimeout(whosThat, 2000)
         }
     })
 }
@@ -80,7 +90,7 @@ const addControls = () => {
     button.setAttribute("class", "controls")
     document.getElementById("controls").append(button)
     button = document.getElementById("play")
-    button.innerHTML = "Play"
+    button.innerHTML = "Next"
     button.addEventListener("click", whosThat)
     let input = document.createElement("input");
     input.setAttribute("type", "text");
@@ -96,4 +106,8 @@ getPokemons(151).then(() => {
     load.remove();
     addControls();
     addImages();
+    whosThat();
 })
+
+
+

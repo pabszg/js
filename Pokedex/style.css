@@ -1,82 +1,87 @@
+:root {
+    --primary:#335dfd;
+    --loading-color: rgba(0,0,0,.05);
+}
+
 body {
-    background-image: url("https://api.triviacreator.com/v1/imgs/quiz/whos_that_pokemon-a5373887-8dd0-449f-8475-d7bc129d767d.webp");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position-x: left;
     margin: 0;
     padding: 0;
+    background: radial-gradient(#add8e6 30%, #08c2ff 80%, red 100%); 
     font-size: 20px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.game-container {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pokemon {
-    width: 50px;
-    transition: ease all 0.2s;
+    width: 500px;
+    transition: all 0.2s ease;
 }
 
-.img {
-    width: 100%;
-    padding: 0;
-    background-color: black;
-}
-
-:root {
-    --primary:#335dfd
-}
-.card {
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: .3rem;
-    z-index: -2;
-    position: relative;
-    box-shadow: 0 4px 94px rgba(0,0,0,.1);
-}
-.loading-name {
-    text-align: center;
-    margin-top: 2rem;
-    color: #666;
-}
-.loading-wrapper {
-    width: 8rem;
-    height: 8rem;
-    position: relative;
-    margin: auto;
+.pokemon, #controls, #pokemon, #input {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.loading-wrapper2 {
-    padding: 3rem;
+
+.hidden-pokemon {
+    filter: brightness(0%);
+}
+
+#play {
+    font-size: 1.5rem;
+    background-color: aliceblue;
+    border: 2px solid black;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#input input {
+    font-size: 1.2rem;
+    height: 60px;
+    border: 2px solid black;
+}
+
+#input input::first-letter {
+    text-transform: capitalize;
+}
+
+.card {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: .3rem;
+    position: relative;
+    box-shadow: 0 4px 94px var(--loading-color);
+}
+
+.loading-wrapper, .loading-wrapper2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 8rem;
-    margin: 0 auto;
     position: relative;
 }
-.loading-devover, .loading-devover:after {
+
+.loading-devover, .loading-devover:after, .loading-devover + .img {
     border-radius: 50%;
     width: 8rem;
     height: 8rem;
 }
-.loading-devover + .img {
-    position: absolute;
-    background-color: var(--primary);
-    top: 0;
-    width: 75%;
-    height: 75%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-}
-.loading-devover + .img img {
-    width: 100%;
-}
-.loading-devover  {
-    border-radius: 50%;
-    border-top: .7rem solid rgba(0,0,0,.05);
-    border-right: .7rem solid rgba(0,0,0,.05);
-    border-bottom: .7rem solid rgba(0,0,0,.05);
-    border-left: .7rem solid var(--primary);
-    position: relative;
-    animation: first linear 1s infinite;
+
+.loading-devover {
+    border: .7rem solid var(--loading-color);
+    border-left-color: var(--primary);
+    animation: first 1s linear infinite;
 }
 
 .loading-devover:after {
@@ -85,63 +90,22 @@ body {
     top: 0;
     left: 0;
     bottom: 0;
-    border-radius: 50%;
+}
+
+.loading-devover + .img {
+    position: absolute;
+    background-color: var(--primary);
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-devover + .img img {
+    width: 100%;
 }
 
 @keyframes first {
-    0% {
+    0%, 100% {
         transform: rotate(0);
     }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-#play {
-    font-size: 3rem;
-    background-color: aliceblue;
-    border: solid 2px black;
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-.pokemon {
-    display: flex;
-    width: 500px;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-}
-.hidden-pokemon {filter: brightness(0%);}
-
-#controls {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#pokemon {
-    width: 70vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#input {
-    width: 30vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-}
-#input input {
-    font-size: 1.2rem;
-    width: 80%;
-    height: 50px;
-    border: 2px solid black;
-    border-radius: 10% 20%;
-}
-.game-container {
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
 }
