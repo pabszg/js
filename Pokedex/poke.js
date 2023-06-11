@@ -2,6 +2,8 @@ let pokemonArray = [];
 let artArray = [];
 let catched = [];
 
+document.querySelector('img').ondragstart = function() { return false; };
+
 const getPokeData = async (id) => {
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
     try {
@@ -58,36 +60,56 @@ const whosThat = () => {
     try {
         document.getElementById("hiddenPoke").remove();
         document.getElementById("answer").value = "";
-        audio.pause
+        audio.pause();
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
     }
-    let random = Math.floor(Math.random() * pokemonArray.length);
-    let pick = pokemonArray[random].artwork;
+
+    if (pokemonArray.length === 0) {
+        console.log('No more pokemons left!');
+        return;  // If no more pokemons, exit the function
+    }
+
+    let randomIndex = Math.floor(Math.random() * pokemonArray.length);
+    let currentPokemon = pokemonArray[randomIndex];
+    let pick = currentPokemon.artwork;
+
     let hiddenPoke = document.createElement("img");
-    hiddenPoke.src = pick
-    hiddenPoke.id = "hiddenPoke"
-    hiddenPoke.classList.add("pokemon", "hidden-pokemon")
-    document.getElementById("pokemon").append(hiddenPoke)
-    let answer = document.getElementById("answer")
-    answer.addEventListener("keyup", (e) => {
+    hiddenPoke.src = pick;
+    hiddenPoke.id = "hiddenPoke";
+    hiddenPoke.classList.add("pokemon", "hidden-pokemon");
+    document.getElementById("pokemon").append(hiddenPoke);
+    checkAnswer = (e) => {
         let typed = document.getElementById("answer").value;
-        console.log(typed)
-        if (typed.toLowerCase() == pokemonArray[random].name) {
+        console.log(typed);
+
+        if (pokemonArray.length === 0) {
+            console.log('No more pokemons left!');
+            return;  // If no more pokemons, exit the function
+        }
+
+        if (typed.toLowerCase() == currentPokemon.name) {
             document.getElementById("hiddenPoke").classList.remove("hidden-pokemon");
             count++;
             document.getElementById("counter").innerHTML = count;
-            catched.push(pokemonArray[random].id);
-            pokemonArray.splice(random,1);
-            console.log(pokemonArray)
+            catched.push(currentPokemon.id);
+
+            // Find the pokemon in the array and remove it
+            let index = pokemonArray.findIndex(p => p.id === currentPokemon.id);
+            if (index > -1) {
+                pokemonArray.splice(index, 1);
+            }
+            console.log(pokemonArray);
             setTimeout(() => {
-                document.getElementById("hiddenPoke").classList.add("captured")
+                document.getElementById("hiddenPoke").classList.add("captured");
             }, 1000);
             setTimeout(whosThat, 1000);
         }
-    })
+    };
 }
+
+let checkAnswer = () => {};
 
 const addControls = () => {
     let button = document.createElement("button")
@@ -103,7 +125,10 @@ const addControls = () => {
     input.setAttribute("id", "answer");
     document.getElementById("input").append(input);
     document.getElementById("counter").innerHTML = count
-
+    let answer = document.getElementById("answer");
+    answer.addEventListener("keyup", (e) => {
+        checkAnswer(e);
+    });
 }
 
 
