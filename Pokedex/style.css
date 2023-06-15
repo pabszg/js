@@ -4,18 +4,27 @@
     --primary:#335dfd;
     --loading-color: rgba(0,0,0,.05);
 }
-
+#loading {
+    display: none;
+  }
 body {
     margin: 0;
     padding: 0;
     background: radial-gradient(#add8e6 30%, #08c2ff 50%, red 100%);
     font-size: 20px;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     font-family: 'Press Start 2P', cursive;
+}
+
+#settings {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    padding: 10%;
+
 }
 
 .game-container {
@@ -70,7 +79,7 @@ body {
     filter: brightness(0%);
 }
 
-#play {
+.button {
     font-size: 1.2rem;
     background-color: aliceblue;
     border: 3px solid black;
