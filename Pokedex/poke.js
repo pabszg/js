@@ -20,6 +20,7 @@ const roman = {
   9: "IX",
 };
 const gen = [0, 151, 251, 386, 493, 649, 721, 809, 905, 1010];
+let tooltip = document.getElementById("tooltip");
 
 const getPokeData = async (id) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
@@ -29,7 +30,11 @@ const getPokeData = async (id) => {
     const pokemonData = {
       id: data.id,
       name: data.name,
+      height: data.height,
+      weight: data.weight,
+      types: data.types.map((typeObj) => typeObj.type.name),
       artwork: data.sprites.other["official-artwork"].front_default,
+      sprite: data.sprites.front_default,
     };
     pokemonArray.push(pokemonData);
     const img = new Image();
@@ -52,7 +57,6 @@ const getPokemons = async (limit) => {
 };
 
 const whosThat = () => {
-  document.getElementById("hiddenPoke")?.remove();
   document.getElementById("answer").disabled = false;
   document.getElementById("answer").value = "";
   document.getElementById("answer").focus();
@@ -82,18 +86,56 @@ const whosThat = () => {
       if (score > highScore) {
         highScore = score;
         localStorage.setItem("highScore", highScore.toString());
-        document.getElementById("highscore").innerHTML = highScore;
+        document.getElementById("highscore").innerHTML = "New highscore! " + highScore;
         console.log("New high score: " + highScore);
       }
       document.getElementById("counter").innerHTML = score;
       catched.push(currentPokemon.id);
-
-      // Find the pokemon in the array and remove it
+      console.log(catched);
+      sprite = document.createElement("img");
+      sprite.src = currentPokemon.sprite;
+      sprite.id = currentPokemon.id;
+      sprite.classList.add("sprite");
       let index = pokemonArray.findIndex((p) => p.id === currentPokemon.id);
       if (index > -1) {
         pokemonArray.splice(index, 1);
       }
-      setTimeout(whosThat, 1000);
+      setTimeout(() => {
+        document.getElementById("hiddenPoke")?.remove();
+        document.getElementById("captured").prepend(sprite);
+        currentSprite = document.getElementById(currentPokemon.id);
+        currentSprite.style.order = currentPokemon.id;
+        currentSprite.addEventListener("mouseover", (e) => {
+          tooltip.style.display = "block";
+          tooltip.style.left = e.clientX - tooltip.offsetWidth / 2 + "px";
+          tooltip.style.top = e.clientY - tooltip.offsetHeight + "px";
+          let types = "";
+          currentPokemon.types.forEach((type) => {
+            let typebadge = `<span class="type ${type} left">${type}</span>`;
+            types += typebadge;
+          });
+          console.log(types);
+          tooltip.innerHTML =
+            `
+            <span class="number">#${currentPokemon.id}</span><br>
+            <span class="pokemonName">${currentPokemon.name}</span><br>
+            <span class="stats">height: ${
+              currentPokemon.height / 10
+            } m</span><br>
+            <span class="stats">weight: ${
+              currentPokemon.weight / 10
+            } kg</span><br>
+            ` + types;
+        });
+        currentSprite.addEventListener("mousemove", (e) => {
+          tooltip.style.left = e.clientX - tooltip.offsetWidth / 2 + "px";
+          tooltip.style.top = e.clientY - tooltip.offsetHeight + "px";
+        });
+        currentSprite.addEventListener("mouseout", () => {
+          tooltip.style.display = "none";
+        });
+        whosThat();
+      }, 1000);
     }
   };
 };
@@ -119,14 +161,17 @@ const addControls = () => {
   document.getElementById("controls").append(button);
   button = document.getElementById("play");
   button.innerHTML = "Skip";
-  button.addEventListener("click", whosThat);
+  button.addEventListener("click", () => {
+    document.getElementById("hiddenPoke")?.remove();
+    whosThat();
+  });
   let exit = document.createElement("button");
   exit.id = "exit";
   exit.classList.add("button");
-  document.getElementById("controls").append(exit);
-  exit = document.getElementById("exit");
-  exit.innerHTML = "Exit";
-  exit.addEventListener("click", addSettings);
+  //document.getElementById("controls").append(exit);
+  //exit = document.getElementById("exit");
+  //exit.innerHTML = "Exit";
+  //exit.addEventListener("click", resetGame);
   let input = document.createElement("input");
   input.type = "text";
   input.class = "text";
@@ -149,6 +194,16 @@ const initGame = (n) => {
     whosThat();
     audio.play();
   });
+};
+
+const resetGame = () => {
+  Array.from(document.body.children).forEach((child) => {
+    child.innerHTML = "";
+  });
+  set = document.createElement("div");
+  set.id = "settings";
+  document.body.append(set);
+  addSettings();
 };
 
 addSettings();
