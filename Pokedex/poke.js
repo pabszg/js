@@ -234,8 +234,10 @@ const addControls = () => {
 // Innicia el juego, carga la cantidad de pokemons definida por la generación.
 const initGame = (n) => {
   document.getElementById("settings").remove();
+  document.getElementById("instructions").remove();
   document.getElementById("loading").style.display = "block";
   getPokemons(n).then(() => {
+    document.getElementById("highscore").style.display = "block";
     let load = document.getElementById("loading");
     load.remove();
     addControls();
