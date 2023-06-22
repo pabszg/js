@@ -1,8 +1,15 @@
-let pokemonArray = [];
-let artArray = [];
-let catched = [];
-let checkAnswer = () => {};
+/*
+WHO'S THAT POKE(DEX)
+Juego que combina "Quién es ese Pokemon", con la funcionalidad de un Pokedex. 
+El objetivo principal es adivinar a qué Pokemon corresponde la silueta.
+A medida que se van adivindando los distintos Pokemons, quedan "capturados" para ver sus datos básicos. 
+*/
+
+let pokemonArray = []; // Creación de un array vacío para almacenar los datos de los Pokemon.
+let catched = []; // Creación de un array vacío para almacenar los Pokemon "atrapados" (adivinados).
+let checkAnswer = () => {}; // Definición de una función vacía, se redefinirá para cada caso. La función es comprobar las respuestas del usuario.
 let audio = new Audio("wtpsound.mp3");
+let tooltip = document.getElementById("tooltip");
 let score = 0;
 let highScore = localStorage.getItem("highScore")
   ? parseInt(localStorage.getItem("highScore"))
@@ -19,9 +26,9 @@ const roman = {
   8: "VIII",
   9: "IX",
 };
-const gen = [0, 151, 251, 386, 493, 649, 721, 809, 905, 1010];
-let tooltip = document.getElementById("tooltip");
+const gen = [0, 151, 251, 386, 493, 649, 721, 809, 905, 1010]; // Array almacena la cantidad de Pokemones incluidos en cada generación, considerando todas las anteriores.
 
+// Esta función asincrónica obtiene los datos de un Pokemon específico de la API PokeAPI.
 const getPokeData = async (id) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
   try {
@@ -45,8 +52,9 @@ const getPokeData = async (id) => {
   }
 };
 
+/*  // Esta función asincrónica obtiene los datos de un número específico de Pokemon (según cada generación) utilizando la función getPokeData.
+ Almacena las promesas en una Array y espera a que todas estén resueltas para ordenar la matriz resultante por ID del pokemon. */
 const getPokemons = async (limit) => {
-  console.log("Generating " + limit);
   pokemonArray = [];
   let promises = [];
   for (let i = 1; i <= limit; i++) {
@@ -56,13 +64,14 @@ const getPokemons = async (limit) => {
   pokemonArray.sort((a, b) => a.id - b.id);
 };
 
+// Función principal del juego. "Elige" un Pokemon al azar, genera su silueta y define la función para validar la respuesta.
 const whosThat = () => {
+  document.getElementById("pokemon").style.display = "block"
   document.getElementById("answer").disabled = false;
   document.getElementById("answer").value = "";
   document.getElementById("answer").focus();
 
   if (pokemonArray.length === 0) {
-    console.log("No more pokemons left!");
     return; // If no more pokemons, exit the function
   }
   let randomIndex = Math.floor(Math.random() * pokemonArray.length);
@@ -76,9 +85,9 @@ const whosThat = () => {
   document.querySelector("img").ondragstart = function () {
     return false;
   };
+  //Cuando la respuesta es correcta, suma un punto al jugador y almacena el puntaje máximo. Elimina el Pokemon de la randomización, lo almacena en una Array de capturados y genera el sprite y tooltip para la funcionalidad de Pokedex.
   checkAnswer = (e) => {
     let typed = document.getElementById("answer").value;
-    console.log(typed);
     if (typed.toLowerCase() == currentPokemon.name) {
       document.getElementById("answer").disabled = true;
       document.getElementById("hiddenPoke").classList.remove("hidden-pokemon");
@@ -86,12 +95,11 @@ const whosThat = () => {
       if (score > highScore) {
         highScore = score;
         localStorage.setItem("highScore", highScore.toString());
-        document.getElementById("highscore").innerHTML = "New highscore! " + highScore;
-        console.log("New high score: " + highScore);
+        document.getElementById("highscore").innerHTML =
+          "New highscore! " + highScore;
       }
       document.getElementById("counter").innerHTML = score;
       catched.push(currentPokemon.id);
-      console.log(catched);
       sprite = document.createElement("img");
       sprite.src = currentPokemon.sprite;
       sprite.id = currentPokemon.id;
@@ -107,14 +115,15 @@ const whosThat = () => {
         currentSprite.style.order = currentPokemon.id;
         currentSprite.addEventListener("mouseover", (e) => {
           tooltip.style.display = "block";
-          tooltip.style.left = e.clientX - tooltip.offsetWidth / 2 + "px";
-          tooltip.style.top = e.clientY - tooltip.offsetHeight + "px";
+          tooltip.style.left =
+            e.clientX + window.scrollX - tooltip.offsetWidth / 2 + "px";
+          tooltip.style.top =
+            e.clientY + window.scrollY - tooltip.offsetHeight - 20 + "px";
           let types = "";
           currentPokemon.types.forEach((type) => {
             let typebadge = `<span class="type ${type} left">${type}</span>`;
             types += typebadge;
           });
-          console.log(types);
           tooltip.innerHTML =
             `
             <span class="number">#${currentPokemon.id}</span><br>
@@ -128,8 +137,10 @@ const whosThat = () => {
             ` + types;
         });
         currentSprite.addEventListener("mousemove", (e) => {
-          tooltip.style.left = e.clientX - tooltip.offsetWidth / 2 + "px";
-          tooltip.style.top = e.clientY - tooltip.offsetHeight + "px";
+          tooltip.style.left =
+            e.clientX + window.scrollX - tooltip.offsetWidth / 2 + "px";
+          tooltip.style.top =
+            e.clientY + window.scrollY - tooltip.offsetHeight - 20 + "px";
         });
         currentSprite.addEventListener("mouseout", () => {
           tooltip.style.display = "none";
@@ -140,6 +151,43 @@ const whosThat = () => {
   };
 };
 
+const description = [
+  'Este juego es una versión interactiva de la popular frase "¿Quién es ese Pokémon?" del mundo Pokémon. <br> Los jugadores son presentados con una silueta oculta de un Pokémon y se les desafía a adivinar el nombre del Pokémon basándose en su silueta. <br> En cada turno, se presenta al jugador una imagen oculta de un Pokémon y un cuadro de entrada para escribir su respuesta. El jugador tiene que adivinar el nombre del Pokémon correctamente para avanzar.',
+  'Cada vez que un jugador adivina correctamente, el Pokémon se revela y se añade a una colección de "Pokémon atrapados", mostrada en la pantalla. <br> Cada Pokémon atrapado correctamente incrementa la puntuación del jugador por 1., y queda disponible para ver más información al pasar el mouse por encima',
+  'El juego cuenta con controles para saltar un turno en caso de que el jugador no pueda adivinar el Pokémon, así como la capacidad de seleccionar la generación de Pokémon que se quiere jugar antes de iniciar el juego.',
+  'Preparado?'
+]
+
+const addDescription = () => {
+  let container = document.getElementById("description");
+
+  let currentDescriptionIndex = 0;
+
+  // Función para actualizar el texto de la descripción.
+  const updateDescription = () => {
+    container.innerHTML = description[currentDescriptionIndex];
+  };
+
+  // Comienza mostrando el primer párrafo.
+  updateDescription();
+
+  let next = document.getElementById("next");
+
+  // Cuando se presiona el botón, avanza al siguiente párrafo y lo muestra.
+  next.addEventListener("click", () => {
+    currentDescriptionIndex++;
+    currentDescriptionIndex == description.length-1 ? next.innerText = "Jugar" : "";
+    if (currentDescriptionIndex >= description.length) {
+      document.getElementById("instructions").innerHTML = "Elige hasta qué generación de Pokémon quieres incluir"
+      addSettings();
+    }
+    updateDescription();
+  });
+};
+
+
+
+// Agrega las opciones iniciales. Hasta qué generación se quiere jugar. Para cada generación inicia el juego con X cantidad de Pokemons.
 const addSettings = () => {
   for (i = 1; i < 10; i++) {
     let button = document.createElement("button");
@@ -149,11 +197,10 @@ const addSettings = () => {
     button = document.getElementById(button.id);
     button.innerHTML = "Up to GEN " + roman[i];
     let n = gen[i];
-    console.log(n);
     button.addEventListener("click", () => initGame(n));
   }
 };
-
+//Agrega controles del juego. Input, boton Skip para saltarse el Pokemon.
 const addControls = () => {
   let button = document.createElement("button");
   button.id = "play";
@@ -184,6 +231,7 @@ const addControls = () => {
   });
 };
 
+// Innicia el juego, carga la cantidad de pokemons definida por la generación.
 const initGame = (n) => {
   document.getElementById("settings").remove();
   document.getElementById("loading").style.display = "block";
@@ -196,14 +244,4 @@ const initGame = (n) => {
   });
 };
 
-const resetGame = () => {
-  Array.from(document.body.children).forEach((child) => {
-    child.innerHTML = "";
-  });
-  set = document.createElement("div");
-  set.id = "settings";
-  document.body.append(set);
-  addSettings();
-};
-
-addSettings();
+addDescription();

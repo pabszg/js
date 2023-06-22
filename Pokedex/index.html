@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div id="loading">Loading...</div>
     <div class="game-container">
-        <div id="settings"></div>
-        <div id="pokemon"></div>
-        <div id="input"></div>
-        <div id="counter"></div>
-        <div id="highscore"></div>
-        <div id="controls"></div>
-        <div id="captured"></div>
-        <div id="tooltip"></div>
+      <div id="instructions">
+        <p id="description"></p>
+        <button id="next" class="button">Next</button>
+      </div>
+      <div id="settings"></div>
+      <div id="pokemon"></div>
+      <div id="input"></div>
+      <div id="counter"></div>
+      <div id="highscore"></div>
+      <div id="controls"></div>
+      <div id="captured"></div>
+      <div id="tooltip"></div>
     </div>
-</body>
-<script src="poke.js"></script>
+  </body>
+  <script
+  src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+  <script src="poke.js"></script>
 </html>
