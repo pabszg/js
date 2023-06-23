@@ -50,16 +50,21 @@ body {
   justify-content: center;
   align-items: center;
 }
+.swal-wide{
+  width:80vw;
+}
 
 .pokemon {
   width: 500px;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-out;
   animation: grow 0.5s;
+  transform-origin: bottom;
 }
 
 @keyframes grow {
   0% {
     width: 0;
+    bottom: 0
   }
   100% {
     width: 500px;

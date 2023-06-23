@@ -72,6 +72,12 @@ const whosThat = () => {
   document.getElementById("answer").focus();
 
   if (pokemonArray.length === 0) {
+    Swal.fire(
+      'MAESTRO POKEMON',
+      'Los atrapaste todos!',
+      'success'
+    )
+    document.getElementById("whos").remove();
     return; // If no more pokemons, exit the function
   }
   let randomIndex = Math.floor(Math.random() * pokemonArray.length);
